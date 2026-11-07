@@ -1,318 +1,655 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-lang="ja">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>おえかきスター｜幼児向けお絵描きアプリ</title>
+<meta name="description" content="おえかきスターは、3歳からのお子さま向けお絵描きアプリです。ペン、スタンプ、動くシール、ぬりえで遊べます。広告なし・個人情報の収集なし。">
+<link rel="icon" href="img/icon-180.png">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+
+<script>
+/* 言語の自動切り替え：?lang= → 前回の選択 → 端末の言語 の順で決定 */
+(function () {
+  var lang = null;
+  try {
+    var q = new URLSearchParams(location.search).get("lang");
+    if (q === "ja" || q === "en") lang = q;
+    if (!lang) lang = localStorage.getItem("oekaki-lang");
+  } catch (e) {}
+  if (lang !== "ja" && lang !== "en") {
+    var langs = navigator.languages || [navigator.language || "ja"];
+    lang = String(langs[0] || "ja").toLowerCase().indexOf("ja") === 0 ? "ja" : "en";
+  }
+  document.documentElement.setAttribute("data-lang", lang);
+  document.documentElement.setAttribute("lang", lang);
+})();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
 
 <style>
+:root {
+  --bg: #fff9f0;
+  --bg-soft: #fff2df;
+  --card: #ffffff;
+  --ink: #2c2a35;
+  --ink-soft: #5d5a68;
+  --line: #f0e3cf;
+  --orange: #ff8a1f;
+  --orange-deep: #e86f00;
+  --yellow: #ffd23f;
+  --sky: #3ba7f5;
+  --sky-soft: #e6f4ff;
+  --green: #3cc47c;
+  --pink: #ff7aa8;
+  --purple: #9b6cf0;
+  --radius: 24px;
+  --shadow: 0 10px 30px rgba(120, 80, 20, 0.08);
+  --round: "Zen Maru Gothic", -apple-system, BlinkMacSystemFont, "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN", sans-serif;
+  --body: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Hiragino Kaku Gothic ProN",
-        "Yu Gothic",
-        sans-serif;
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
-    line-height: 1.8;
-    color: #333333;
-    background-color: #fffaf5;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--sky); }
 
-h1 {
-    color: #ff7b00;
-    margin-bottom: 8px;
+/* 言語ごとの表示切り替え */
+html[data-lang="ja"] .en, html[data-lang="en"] .ja { display: none !important; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(255, 249, 240, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
 }
-
-h2 {
-    color: #444444;
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 64px; gap: 12px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); font-family: var(--round); font-weight: 900; font-size: 18px; white-space: nowrap; }
+.brand img { width: 38px; height: 38px; border-radius: 10px; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.lang-switch { display: inline-flex; background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+.lang-switch button {
+  border: 0; background: transparent; font: inherit; font-size: 13px; font-weight: 700;
+  padding: 5px 12px; border-radius: 999px; color: var(--ink-soft); cursor: pointer;
 }
+html[data-lang="ja"] .lang-switch [data-set="ja"],
+html[data-lang="en"] .lang-switch [data-set="en"] { background: var(--ink); color: #fff; }
+.store-badge.header-badge { display: none; }
+.lang-switch button { white-space: nowrap; }
 
-h3 {
-    margin-top: 0;
+/* ---------- App Store バッジ（Apple公式の画像をそのまま使う。色・形は変えない） ---------- */
+.store-badge { display: inline-block; line-height: 0; border-radius: 10px; transition: transform .15s ease, opacity .15s ease; }
+.store-badge:hover { transform: translateY(-2px); }
+.store-badge:focus-visible { outline: 3px solid var(--sky); outline-offset: 4px; }
+.store-badge img { height: 56px; width: auto; }
+.store-badge.header-badge img { height: 40px; }   /* Appleの最小サイズ（高さ40px）以上 */
+
+/* ---------- Hero ---------- */
+.hero { position: relative; padding: 56px 0 80px; overflow: hidden; }
+.hero::before {
+  content: ""; position: absolute; inset: -20% -10% auto -10%; height: 120%;
+  background:
+    radial-gradient(closest-side, rgba(255, 210, 63, .35), transparent) 10% 20% / 520px 520px no-repeat,
+    radial-gradient(closest-side, rgba(59, 167, 245, .18), transparent) 95% 10% / 600px 600px no-repeat;
+  pointer-events: none;
 }
+.hero .wrap { position: relative; display: grid; grid-template-columns: 0.85fr 1.3fr; align-items: center; gap: 40px; }
+.hero-star { width: 150px; margin: 0 0 8px -10px; animation: bob 4s ease-in-out infinite; }
+.eyebrow { display: inline-block; font-family: var(--round); font-weight: 700; color: var(--orange-deep); background: #fff; border: 1px solid var(--line); padding: 4px 14px; border-radius: 999px; font-size: 14px; }
+.hero h1 .ln { white-space: nowrap; }
+.hero h1 { font-family: var(--round); font-weight: 900; font-size: clamp(34px, 4.6vw, 56px); line-height: 1.2; margin: 14px 0 12px; letter-spacing: .01em; }
+.hero h1 .accent { color: var(--orange); }
+.hero p.lead { font-size: 18px; color: var(--ink-soft); margin: 0 0 26px; max-width: 30em; }
+.hero-cta { max-width: 30em; text-align: center; }   /* 説明文の幅の中央にバッジを置く */
+.hero-meta { margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
 
-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
+.hero-visual { position: relative; }
+/* 左にiPhone・右にiPad。底辺をそろえて、少し重ねる */
+.devices { position: relative; z-index: 2; }
+.dev { position: relative; }
+.dev img { width: 100%; }
+picture { display: block; }  /* AVIF(軽い画像)→対応していない端末はPNG。<source>は表示されない */
+.stk-l picture { width: 100%; height: 100%; }
+.dev-ipad { width: 80%; margin-left: auto; filter: drop-shadow(0 24px 40px rgba(60, 40, 10, .18)); }
+.dev-iphone { position: absolute; left: 0; bottom: 0; width: 26.5%; z-index: 3; filter: drop-shadow(0 18px 30px rgba(60, 40, 10, .25)); }
+.screen { position: absolute; overflow: hidden; }
+.screen canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.screen-stickers { position: absolute; inset: 0; }
+.stamp { position: absolute; width: 0; height: 0; }
+.stamp .stk { left: 0; top: 0; }
+.tap-ring { position: absolute; left: 0; top: 0; width: 70px; height: 70px; border-radius: 50%; border: 3px solid rgba(255,255,255,.9); pointer-events: none; }
+
+/* 動くシール（js/stickers.js） */
+.stk { position: absolute; width: 0; height: 0; z-index: 4; pointer-events: none; }
+.stk-g { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.stk-l { position: absolute; left: 0; top: 0; will-change: transform; }
+.stk-l img { width: 100%; height: 100%; object-fit: contain; display: block; user-select: none; -webkit-user-drag: none; }
+
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes wiggle { 0%,100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg) translateY(-6px); } }
+@keyframes drift { 0%,100% { transform: translate(0,0) rotate(0); } 50% { transform: translate(-16px,10px) rotate(-8deg); } }
+
+/* ---------- Trust strip ---------- */
+.trust { background: #fff; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.trust ul { list-style: none; margin: 0 auto; padding: 22px 24px; display: grid; grid-template-columns: repeat(4, auto); justify-content: space-between; gap: 12px 24px; }
+.trust li { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 15px; }
+.trust .ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+.trust .ic svg { width: 22px; height: 22px; }
+.trust li small { display: block; font-weight: 500; color: var(--ink-soft); font-size: 12px; line-height: 1.4; }
+
+/* ---------- Sections ---------- */
+section.block { padding: 88px 0; }
+.sec-head { text-align: center; max-width: 640px; margin: 0 auto 48px; }
+.sec-head h2 { font-family: var(--round); font-weight: 900; font-size: clamp(28px, 3.6vw, 38px); margin: 8px 0 10px; line-height: 1.35; }
+.sec-head p { color: var(--ink-soft); margin: 0; }
+.kicker { font-family: var(--round); font-weight: 700; color: var(--orange-deep); font-size: 14px; letter-spacing: .08em; }
+
+/* Features */
+.features { display: grid; gap: 28px; }
+.feature {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+  background: var(--card); border-radius: 32px; padding: 40px; box-shadow: var(--shadow); border: 1px solid var(--line);
 }
+.feature:nth-child(even) .feature-media { order: -1; }
+.feature .tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--round); font-weight: 700; font-size: 14px; padding: 4px 14px; border-radius: 999px; }
+.feature h3 { font-family: var(--round); font-weight: 900; font-size: 28px; margin: 12px 0 8px; line-height: 1.35; }
+.feature h3 .num { font-size: 1.35em; }
+.feature p { color: var(--ink-soft); margin: 0; }
+.feature-media { position: relative; border-radius: 22px; padding: 22px; display: grid; place-items: center; min-height: 260px; }
+.feature-media .shot { filter: drop-shadow(0 14px 24px rgba(60,40,10,.15)); }
+.feature-media .shot.phone { max-height: 380px; width: auto; }
 
-.header {
-    text-align: center;
-    margin-bottom: 40px;
+.t-pen { background: #fff0e0; color: var(--orange-deep); }
+.t-stamp { background: #ffe8f0; color: #d63f78; }
+.t-sticker { background: #e6f4ff; color: #1677d2; }
+.t-color { background: #e7f8ee; color: #1f9b5a; }
+.m-pen { background: linear-gradient(160deg, #fff4e6, #ffe3c4); }
+.m-stamp { background: linear-gradient(160deg, #fff0f5, #ffdbe8); }
+.m-sticker { background: linear-gradient(160deg, #eef7ff, #d5ebff); }
+.m-color { background: linear-gradient(160deg, #effbf3, #d3f2df); }
+
+.pen-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.pen-chips > span { font-weight: 700; font-size: 14px; padding: 6px 16px; border-radius: 999px; background: #fff; border: 1px solid var(--line); color: var(--ink); }
+.pen-chips > .neon { color: #fff; background: #1d1b3a; border-color: #1d1b3a; text-shadow: 0 0 3px rgba(90, 220, 255, .9), 0 0 8px rgba(0, 122, 255, .8); }
+.pen-chips > .glitter { color: #5b2a86; border: 0; padding: 7px 17px; background: linear-gradient(100deg, #ffd3ec, #fff1c2 35%, #d4f3ff 65%, #e6d6ff); box-shadow: inset 0 0 0 1px rgba(155, 108, 240, .35); }
+
+.stamp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: 100%; }
+.stamp-grid img { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border-radius: 18px; padding: 12px; box-shadow: 0 4px 10px rgba(0,0,0,.05); transition: transform .2s; }
+.stamp-grid img:hover { transform: scale(1.08) rotate(-4deg); }
+
+.sticker-stage { position: relative; width: 100%; height: 340px; overflow: hidden; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
+
+/* ペンのデモ（js/pens.js） */
+.pen-canvas-wrap { width: 100%; background: #fff; border-radius: 16px; box-shadow: inset 0 0 0 1px rgba(0,0,0,.04); }
+#pen-demo { display: block; width: 100%; height: 300px; }
+.pen-chips > span { transition: transform .2s ease, box-shadow .2s ease; }
+.pen-chips > span.on { transform: translateY(-2px) scale(1.06); box-shadow: 0 6px 14px rgba(0,0,0,.12); }
+
+/* Premium */
+.premium-band { padding-top: 0; }
+.premium {
+  position: relative; border-radius: 36px; padding: 56px 48px 40px; overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 0%, #fff8d9 0%, #fff3e6 45%, #fdeff7 100%);
+  border: 1px solid #f5e1b8; box-shadow: var(--shadow);
 }
-
-.app-icon {
-    width: 140px;
-    border-radius: 28px;
+.premium::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle, rgba(255, 214, 10, .55) 1.5px, transparent 2px), radial-gradient(circle, rgba(255, 122, 168, .35) 1.5px, transparent 2px);
+  background-size: 46px 46px, 70px 70px; background-position: 0 0, 23px 30px; opacity: .6;
 }
+.premium > * { position: relative; }
+.premium-head { text-align: center; max-width: 640px; margin: 0 auto 36px; }
+.premium-head .crown { display: inline-block; width: 64px; animation: bob 3s ease-in-out infinite; }
+.premium-head .kicker { color: #c98a00; }
+.premium-head h2 { font-family: var(--round); font-weight: 900; font-size: clamp(28px, 3.6vw, 38px); margin: 6px 0 10px; line-height: 1.35; }
+.premium-head p { margin: 0; color: var(--ink-soft); }
+.perk-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.perk { background: rgba(255, 255, 255, .92); border: 1px solid #f3e5cc; border-radius: 22px; padding: 20px 20px 18px; display: grid; grid-template-columns: 52px 1fr; column-gap: 14px; row-gap: 2px; align-items: start; }
+.perk-ic { grid-row: span 2; width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; }
+.perk-ic img { width: 40px; height: 40px; object-fit: contain; }
+.perk-ic svg { width: 28px; height: 28px; }
+.perk strong { font-family: var(--round); font-weight: 900; font-size: 17px; line-height: 1.45; }
+.perk .d { font-size: 14px; color: var(--ink-soft); line-height: 1.6; }
+.perk-ic.swatches { background: #1d1b3a; display: flex; align-items: center; justify-content: center; gap: 0; padding: 0 6px; }
+.perk-ic.swatches i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); margin-left: -3px; box-shadow: 0 0 6px var(--c), 0 0 0 1.5px #fff inset; }
+.premium-trust { margin-top: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding-top: 22px; border-top: 1px dashed #ecd3a5; }
+.pt-item { display: grid; gap: 2px; text-align: center; font-size: 13px; color: var(--ink-soft); line-height: 1.6; }
+.pt-item strong { font-size: 15px; color: var(--ink); }
+br.pc { display: inline; }
 
-.card {
-    background-color: #ffffff;
-    border: 1px solid #dddddd;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 20px;
+/* Gallery */
+.gallery-band { background: var(--bg-soft); }
+.gallery { display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 8px 4px 22px; -webkit-overflow-scrolling: touch; }
+.gallery figure { margin: 0; flex: none; scroll-snap-align: center; text-align: center; }
+.gallery img { height: 380px; width: auto; filter: drop-shadow(0 14px 22px rgba(60,40,10,.14)); }
+.gallery figcaption { margin-top: 10px; font-size: 14px; font-weight: 700; color: var(--ink-soft); }
+
+/* Parents */
+.parents { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+.parents-photo { border-radius: 32px; overflow: hidden; box-shadow: var(--shadow); }
+.check-list { list-style: none; padding: 0; margin: 24px 0 28px; display: grid; gap: 14px; }
+.check-list li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
+.check-list .ck { width: 30px; height: 30px; border-radius: 50%; background: #e7f8ee; display: grid; place-items: center; margin-top: 2px; }
+.check-list .ck svg { width: 16px; height: 16px; }
+.check-list strong { display: block; }
+.check-list span.d { color: var(--ink-soft); font-size: 15px; }
+.btn-line { display: inline-flex; align-items: center; gap: 8px; padding: 12px 22px; border-radius: 14px; border: 2px solid var(--ink); color: var(--ink); text-decoration: none; font-weight: 700; transition: background .15s, color .15s; }
+.btn-line:hover { background: var(--ink); color: #fff; }
+
+/* Info / terms / contact */
+.info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.info-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px; box-shadow: var(--shadow); }
+.info-card h3 { font-family: var(--round); font-weight: 900; font-size: 20px; margin: 0 0 12px; }
+.info-card dl { margin: 0; display: grid; gap: 10px; }
+.info-card dt { font-size: 13px; color: var(--ink-soft); font-weight: 700; }
+.info-card dd { margin: 0 0 4px; font-weight: 700; }
+.info-card p { margin: 0 0 10px; font-size: 15px; color: var(--ink-soft); }
+.mail { word-break: break-all; font-weight: 700; }
+
+/* CTA */
+.cta { text-align: center; padding: 80px 0 96px; }
+.cta .cta-icon { width: 120px; margin: 0 auto 12px; border-radius: 28px; box-shadow: var(--shadow); }
+.cta h2 { font-family: var(--round); font-weight: 900; font-size: clamp(26px, 3.4vw, 36px); margin: 0 0 22px; }
+
+/* Footer */
+.site-footer { border-top: 1px solid var(--line); padding: 32px 0 40px; color: var(--ink-soft); font-size: 14px; }
+.site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+.site-footer a { color: var(--ink-soft); }
+.site-footer nav { display: flex; gap: 18px; flex-wrap: wrap; }
+
+/* ---------- Responsive ---------- */
+@media (min-width: 720px) { .store-badge.header-badge { display: inline-block; } }
+@media (max-width: 900px) {
+  .hero .wrap, .feature, .parents { grid-template-columns: 1fr; }
+  .feature:nth-child(even) .feature-media { order: 0; }
+  .hero { padding-top: 32px; padding-bottom: 48px; text-align: center; }
+  .hero-star { margin: 0 auto 6px; }
+  .hero p.lead { margin-left: auto; margin-right: auto; }
+  .hero-cta { margin: 0 auto; }
+  .hero-visual { margin-top: 24px; }
+  .trust ul { grid-template-columns: repeat(2, 1fr); justify-content: stretch; padding: 22px 16px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .perk-grid { grid-template-columns: 1fr 1fr; }
+  .premium { padding: 44px 28px 32px; }
+  br.pc { display: none; }
 }
-
-.link-button {
-    display: inline-block;
-    padding: 11px 20px;
-    margin-top: 8px;
-    background-color: #007aff;
-    color: #ffffff;
-    border-radius: 10px;
-    font-weight: bold;
+@media (max-width: 560px) {
+  .wrap { padding: 0 16px; }
+  .brand span.name { font-size: 16px; }
+  .hero-star { width: 120px; }
+  .hero p.lead { font-size: 16px; }
+  section.block { padding: 64px 0; }
+  .feature { padding: 22px; border-radius: 24px; gap: 20px; }
+  .feature h3 { font-size: 23px; }
+  .feature-media { padding: 14px; min-height: 0; }
+  .feature-media .shot.phone { max-height: 320px; }
+  .stamp-grid { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .stamp-grid img { padding: 6px; border-radius: 12px; }
+  .sticker-stage { height: 300px; }
+  #pen-demo { height: 260px; }
+  .gallery img { height: 300px; }
+  .perk-grid, .premium-trust { grid-template-columns: 1fr; }
+  .premium { padding: 36px 16px 24px; border-radius: 26px; }
+  .perk { padding: 16px; }
+  .pt-item { text-align: left; }
+  .trust li { font-size: 14px; }
 }
-
-a {
-    color: #007aff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-.link-button:hover {
-    text-decoration: none;
-    opacity: 0.85;
-}
-
-.contact-link {
-    word-break: break-all;
-}
-
-.footer {
-    margin-top: 40px;
-    padding-top: 24px;
-    border-top: 1px solid #dddddd;
-    text-align: center;
-    color: #666666;
-    font-size: 14px;
-}
-
-@media (max-width: 600px) {
-    body {
-        margin: 0 auto;
-        padding: 18px 14px 40px;
-    }
-
-    .app-icon {
-        width: 120px;
-    }
-
-    .card {
-        padding: 18px 15px;
-    }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }
 </style>
 </head>
 
 <body>
 
-<header class="header">
-
-<img
-    class="app-icon"
-    src="icon.png"
-    alt="おえかきスターのアプリアイコン"
->
-
-<h1>おえかきスター</h1>
-
-<p>
-幼児向けのお絵描きアプリです。
-</p>
-
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="./">
+      <img src="img/icon-180.png" alt="">
+      <span class="name"><span class="ja">おえかきスター</span><span class="en">Crayon Friends</span></span>
+    </a>
+    <div class="header-right">
+      <div class="lang-switch" role="group" aria-label="Language">
+        <button type="button" data-set="ja">日本語</button>
+        <button type="button" data-set="en">English</button>
+      </div>
+      <a class="store-badge header-badge" href="https://apps.apple.com/app/id6787955768">
+        <img class="ja" src="img/badges/app-store-ja.svg" alt="App Storeからダウンロード">
+        <img class="en" src="img/badges/app-store-en.svg" alt="Download on the App Store">
+      </a>
+    </div>
+  </div>
 </header>
 
 <main>
 
-<section>
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-text">
+      <span class="eyebrow"><span class="ja">小さなお子さまのためのお絵描きアプリ</span><span class="en">A drawing app for little ones</span></span>
+      <h1>
+        <span class="ja"><span class="ln">かいて、はって、</span><br><span class="accent ln">うごきだす！</span></span>
+        <span class="en"><span class="ln">Draw, stick,</span><br><span class="accent">and watch it move!</span></span>
+      </h1>
+      <p class="lead">
+        <span class="ja">おえかきスターは、幼児向けのお絵描きアプリです。お絵描き、ぬりえ、スタンプ、動くシールで楽しく遊べます。</span>
+        <span class="en">Crayon Friends is a drawing app for young children. Draw, color, stamp, and decorate with animated stickers.</span>
+      </p>
+      <div class="hero-cta">
+        <a class="store-badge" href="https://apps.apple.com/app/id6787955768">
+          <img class="ja" src="img/badges/app-store-ja.svg" alt="App Storeからダウンロード">
+          <img class="en" src="img/badges/app-store-en.svg" alt="Download on the App Store">
+        </a>
+      </div>
+    </div>
 
-<h2>アプリの特徴</h2>
-
-<p>
-お絵描き、ぬりえ、スタンプ、動くシールで楽しく遊べます。
-</p>
-
+    <div class="hero-visual">
+      <div class="devices">
+        <div class="dev dev-ipad">
+          <picture><source type="image/avif" srcset="img/shots/ipad1-J.avif?v=2"><img class="ja" src="img/shots/ipad1-J.png?v=2" alt="おえかきスターのiPad画面。星空を描いて、動くシールを貼っているところ"></picture>
+          <picture><source type="image/avif" srcset="img/shots/ipad1-E.avif?v=3"><img class="en" src="img/shots/ipad1-E.png?v=3" alt="Crayon Friends on iPad: drawing a night sky and adding animated stickers"></picture>
+          <div class="screen" data-screen="ipad"><canvas aria-hidden="true"></canvas><div class="screen-stickers" aria-hidden="true"></div></div>
+        </div>
+        <div class="dev dev-iphone">
+          <picture><source type="image/avif" srcset="img/shots/iphone-blank-J.avif?v=2"><img class="ja" src="img/shots/iphone-blank-J.png?v=2" alt="おえかきスターのiPhone画面。子どもが描いた星のキャラクター"></picture>
+          <picture><source type="image/avif" srcset="img/shots/iphone-blank-E.avif?v=2"><img class="en" src="img/shots/iphone-blank-E.png?v=2" alt="Crayon Friends on iPhone: a star character drawn by a child"></picture>
+          <div class="screen" data-screen="iphone"><canvas aria-hidden="true"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="card">
-
-<h3>🖍️ 3種類のたのしいペン</h3>
-
-<img
-    src="pen.png"
-    alt="普通ペン、ネオンペン、キラキラペンの紹介"
->
-
-<p>
-普通ペン、ネオンペン、キラキラペンで、楽しくお絵描きできます。
-</p>
-
+<!-- ===== Trust strip ===== -->
+<section class="trust" aria-label="安心ポイント">
+  <ul class="wrap">
+    <li>
+      <span class="ic" style="background:#ffe8e8"><svg viewBox="0 0 24 24" fill="none" stroke="#e5484d" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></span>
+      <span><span class="ja">広告なし</span><span class="en">No ads</span><small><span class="ja">遊びに集中できます</span><span class="en">Focus on play</span></small></span>
+    </li>
+    <li>
+      <span class="ic" style="background:#e6f4ff"><svg viewBox="0 0 24 24" fill="none" stroke="#1677d2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
+      <span><span class="ja">個人情報を集めません</span><span class="en">No data collected</span><small><span class="ja">追跡・解析もなし</span><span class="en">No tracking or analytics</span></small></span>
+    </li>
+    <li>
+      <span class="ic" style="background:#fff3d6"><svg viewBox="0 0 24 24" fill="none" stroke="#c98a00" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></span>
+      <span><span class="ja">アカウント不要</span><span class="en">No account needed</span><small><span class="ja">すぐに遊べます</span><span class="en">Start playing right away</span></small></span>
+    </li>
+    <li>
+      <span class="ic" style="background:#e7f8ee"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg></span>
+      <span><span class="ja">iPhone・iPad</span><span class="en">iPhone & iPad</span><small><span class="ja">どちらでも遊べます</span><span class="en">Play on either</span></small></span>
+    </li>
+  </ul>
 </section>
 
-<section class="card">
+<!-- ===== Features ===== -->
+<section class="block" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">FEATURES</div>
+      <h2><span class="ja">アプリの特徴</span><span class="en">What's inside</span></h2>
+      <p><span class="ja">お絵描き、ぬりえ、スタンプ、動くシールで楽しく遊べます。</span><span class="en">Drawing, coloring pages, stamps, and animated stickers.</span></p>
+    </div>
 
-<h3>⭐ 80個以上のスタンプ</h3>
+    <div class="features">
 
-<img
-    src="stamp.png"
-    alt="おえかきスターのスタンプ機能"
->
+      <article class="feature">
+        <div>
+          <span class="tag t-pen">🖍️ <span class="ja">ペン</span><span class="en">Pens</span></span>
+          <h3><span class="ja"><span class="num">3</span>種類のたのしいペン</span><span class="en"><span class="num">3</span> fun kinds of pens</span></h3>
+          <p><span class="ja">普通ペン、ネオンペン、キラキラペンで、楽しくお絵描きできます。</span><span class="en">Draw with a regular pen, a neon pen, and a glitter pen.</span></p>
+          <div class="pen-chips">
+            <span data-pen-chip><span class="ja">ふつう</span><span class="en">Regular</span></span>
+            <span data-pen-chip class="neon"><span class="ja">ネオン</span><span class="en">Neon</span></span>
+            <span data-pen-chip class="glitter"><span class="ja">キラキラ</span><span class="en">Glitter</span></span>
+          </div>
+        </div>
+        <div class="feature-media m-pen">
+          <div class="pen-canvas-wrap">
+            <canvas id="pen-demo" role="img" aria-label="ふつうペン、ネオンペン、キラキラペンで線を描くようす"></canvas>
+          </div>
+        </div>
+      </article>
 
-<p>
-どうぶつ、のりもの、たべものなど、たくさんのスタンプを使えます。
-</p>
+      <article class="feature">
+        <div>
+          <span class="tag t-stamp">⭐ <span class="ja">スタンプ</span><span class="en">Stamps</span></span>
+          <h3><span class="ja"><span class="num">80</span>個以上のスタンプ</span><span class="en">Over <span class="num">80</span> stamps</span></h3>
+          <p><span class="ja">どうぶつ、のりもの、たべものなど、たくさんのスタンプを使えます。</span><span class="en">Animals, vehicles, food, and many more stamps to use.</span></p>
+        </div>
+        <div class="feature-media m-stamp">
+          <div class="stamp-grid">
+            <picture><source type="image/avif" srcset="img/stamps/stamp1.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp1.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp2.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp2.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp3.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp3.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp4.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp4.png" alt=""></picture>
+            <picture><source type="image/avif" srcset="img/stamps/stamp5.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp5.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp6.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp6.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp7.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp7.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp8.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp8.png" alt=""></picture>
+            <picture><source type="image/avif" srcset="img/stamps/stamp9.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp9.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp10.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp10.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp11.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp11.png" alt=""></picture><picture><source type="image/avif" srcset="img/stamps/stamp12.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp12.png" alt=""></picture>
+          </div>
+        </div>
+      </article>
 
+      <article class="feature">
+        <div>
+          <span class="tag t-sticker">🦋 <span class="ja">動くシール</span><span class="en">Animated stickers</span></span>
+          <h3><span class="ja"><span class="num">50</span>個以上の動くシール</span><span class="en">Over <span class="num">50</span> animated stickers</span></h3>
+          <p><span class="ja">かわいい動くシールを貼って遊べます。</span><span class="en">Place cute stickers that come to life and move.</span></p>
+        </div>
+        <div class="feature-media m-sticker">
+          <div class="sticker-stage" data-ref="440" aria-hidden="true">
+            <div class="stk" data-type="whale" data-size="130" data-move="0.75" data-delay="1" style="left:60%;top:56%"></div>
+            <div class="stk" data-type="gasDrive" data-size="120" data-move="0.8" data-delay="2" style="left:50%;top:82%"></div>
+            <div class="stk" data-type="rocket" data-size="95" data-move="1.1" data-delay="0.5" style="left:14%;top:84%"></div>
+            <div class="stk" data-type="owl" data-size="110" data-move="0.75" data-delay="4" style="left:50%;top:36%"></div>
+            <div class="stk" data-type="fairy" data-size="110" data-move="0.85" data-delay="7" style="left:42%;top:42%"></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="feature">
+        <div>
+          <span class="tag t-color">🎨 <span class="ja">ぬりえ</span><span class="en">Coloring</span></span>
+          <h3><span class="ja"><span class="num">60</span>個以上のぬりえ</span><span class="en">Over <span class="num">60</span> coloring pages</span></h3>
+          <p><span class="ja">お子さまが楽しめるぬりえを、たくさん収録しています。</span><span class="en">Lots of coloring pages made for little ones.</span></p>
+        </div>
+        <div class="feature-media m-color">
+          <picture><source type="image/avif" srcset="img/shots/ipad2-J.avif?v=2"><img loading="lazy" decoding="async" class="shot ja" src="img/shots/ipad2-J.png?v=2" alt="iPadのぬりえ画面（アイスクリーム）"></picture>
+          <picture><source type="image/avif" srcset="img/shots/ipad2-E.avif?v=3"><img loading="lazy" decoding="async" class="shot en" src="img/shots/ipad2-E.png?v=3" alt="Coloring an ice cream on iPad"></picture>
+        </div>
+      </article>
+
+    </div>
+  </div>
 </section>
 
-<section class="card">
+<!-- ===== Premium ===== -->
+<section class="block premium-band" id="premium">
+  <div class="wrap">
+    <div class="premium">
+      <div class="premium-head">
+        <span class="crown" aria-hidden="true">
+          <svg viewBox="0 0 64 48"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="3" stroke-linejoin="round"/><circle cx="6" cy="14" r="4" fill="#FF7AA8"/><circle cx="32" cy="6" r="4.5" fill="#3BA7F5"/><circle cx="58" cy="14" r="4" fill="#3CC47C"/><rect x="11" y="38" width="42" height="6" rx="2" fill="#F5B800"/></svg>
+        </span>
+        <div class="kicker">PREMIUM</div>
+        <h2><span class="ja">プレミアムで、ぜんぶ遊べる！</span><span class="en">Unlock everything with Premium</span></h2>
+        <p><span class="ja">無料でも、ペン・スタンプ・シール・ぬりえの一部で遊べます。<br class="pc">気に入ったら、プレミアムですべての機能が使えるようになります。</span><span class="en">Try pens, stamps, stickers, and coloring pages for free.<br class="pc">If your child loves it, Premium unlocks every feature.</span></p>
+      </div>
 
-<h3>🦋 50個以上の動くシール</h3>
+      <ul class="perk-grid">
+        <li class="perk">
+          <span class="perk-ic swatches" aria-hidden="true"><i style="--c:#FF3B30"></i><i style="--c:#FF9500"></i><i style="--c:#34C759"></i><i style="--c:#007AFF"></i><i style="--c:#AF52DE"></i></span>
+          <strong><span class="ja">ネオン・キラキラが全色に</span><span class="en">All neon & glitter colors</span></strong>
+          <span class="d"><span class="ja">無料版の3色（あか・きいろ・あお）から、パレットのすべての色へ。</span><span class="en">From 3 free colors (red, yellow, blue) to the whole palette.</span></span>
+        </li>
+        <li class="perk">
+          <span class="perk-ic" style="background:#ffe8f0"><picture><source type="image/avif" srcset="img/stamps/stamp6.avif"><img loading="lazy" decoding="async" src="img/stamps/stamp6.png" alt=""></picture></span>
+          <strong><span class="ja">すべてのスタンプ 80個以上</span><span class="en">All stamps — 80+ designs</span></strong>
+          <span class="d"><span class="ja">どうぶつ、のりもの、たべもの…ぜんぶ使えます。</span><span class="en">Animals, vehicles, food, and more.</span></span>
+        </li>
+        <li class="perk">
+          <span class="perk-ic" style="background:#ffe3ea"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.5-9.3C1.2 8.4 3.3 5 6.8 5c2 0 3.4 1.1 5.2 3 1.8-1.9 3.2-3 5.2-3 3.5 0 5.6 3.4 4.3 6.7C19.5 16.4 12 21 12 21z" fill="#FF5C8A"/></svg></span>
+          <strong><span class="ja">スタンプのお気に入り登録</span><span class="en">Favorite stamps</span></strong>
+          <span class="d"><span class="ja">スタンプを長押しすると、お気に入りに登録できます。</span><span class="en">Long-press a stamp to add it to your favorites.</span></span>
+        </li>
+        <li class="perk">
+          <span class="perk-ic" style="background:#e6f4ff"><picture><source type="image/avif" srcset="img/stickers/unicorn.avif"><img loading="lazy" decoding="async" src="img/stickers/unicorn.png" alt=""></picture></span>
+          <strong><span class="ja">すべての動くシール 50個以上</span><span class="en">All animated stickers — 50+</span></strong>
+          <span class="d"><span class="ja">UFOもドラゴンも、ぜんぶ動きだします。</span><span class="en">Every sticker comes to life.</span></span>
+        </li>
+        <li class="perk">
+          <span class="perk-ic" style="background:#e7f8ee"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3" fill="#fff"/><path d="M8 15c1.5-4 3-6 4-6s1.6 2 2.2 3.2c.5 1 1.3.8 1.8-.2"/><circle cx="9" cy="8" r="1.4" fill="#1f9b5a"/></svg></span>
+          <strong><span class="ja">すべてのぬりえ 60個以上</span><span class="en">All coloring pages — 60+</span></strong>
+          <span class="d"><span class="ja">どうぶつ、のりもの、おひめさま、きょうりゅう…</span><span class="en">Animals, vehicles, princesses, dinosaurs…</span></span>
+        </li>
+        <li class="perk">
+          <span class="perk-ic" style="background:#fff3d6"><svg viewBox="0 0 24 24"><rect x="3" y="12" width="18" height="9" rx="2" fill="#E8A300"/><path d="M3 12c0-4 3-7 9-7s9 3 9 7z" fill="#FFC93C"/><rect x="10" y="10" width="4" height="5" rx="1" fill="#8B5A2B"/></svg></span>
+          <strong><span class="ja">キープと読み込みが3つ全部</span><span class="en">All 3 keep & load slots</span></strong>
+          <span class="d"><span class="ja">描きかけの絵を3つまでキープして、あとで続きが描けます。</span><span class="en">Keep up to 3 drawings and continue them later.</span></span>
+        </li>
+      </ul>
 
-<img
-    src="sticker.png"
-    alt="おえかきスターの動くシール"
->
-
-<p>
-かわいい動くシールを貼って遊べます。
-</p>
-
+      <div class="premium-trust">
+        <div class="pt-item">
+          <strong><span class="ja">1回だけのお支払い</span><span class="en">One-time purchase</span></strong>
+          <span><span class="ja">月額課金ではありません。価格はApp Storeでご確認ください。</span><span class="en">Not a subscription. See the App Store for the price.</span></span>
+        </div>
+        <div class="pt-item">
+          <strong><span class="ja">おうちの人の確認つき</span><span class="en">Grown-up check</span></strong>
+          <span><span class="ja">購入の前に、大人向けのかんたんな計算問題が出ます。</span><span class="en">A simple math question for grown-ups appears before purchase.</span></span>
+        </div>
+        <div class="pt-item">
+          <strong><span class="ja">購入の復元に対応</span><span class="en">Restore purchases</span></strong>
+          <span><span class="ja">機種変更しても、同じApple IDで復元できます。</span><span class="en">Restore on a new device with the same Apple ID.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="card">
-
-<h3>🎨 60個以上のぬりえ</h3>
-
-<img
-    src="coloring.png"
-    alt="おえかきスターのぬりえ機能"
->
-
-<p>
-お子さまが楽しめるぬりえを、たくさん収録しています。
-</p>
-
+<!-- ===== Gallery ===== -->
+<section class="block gallery-band" id="screens">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">SCREENSHOTS</div>
+      <h2><span class="ja">iPhoneでも、iPadでも</span><span class="en">On iPhone and iPad</span></h2>
+      <p><span class="ja">画面の大きさに合わせて、ボタンの配置が変わります。</span><span class="en">The layout adapts to every screen size.</span></p>
+    </div>
+    <div class="gallery">
+      <figure><picture><source type="image/avif" srcset="img/shots/ipad2-J.avif?v=2"><img loading="lazy" decoding="async" class="ja" src="img/shots/ipad2-J.png?v=2" alt=""></picture><picture><source type="image/avif" srcset="img/shots/ipad2-E.avif?v=3"><img loading="lazy" decoding="async" class="en" src="img/shots/ipad2-E.png?v=3" alt=""></picture><figcaption>iPad</figcaption></figure>
+      <figure><picture><source type="image/avif" srcset="img/shots/iphone-draw-J.avif?v=2"><img loading="lazy" decoding="async" class="ja" src="img/shots/iphone-draw-J.png?v=2" alt=""></picture><picture><source type="image/avif" srcset="img/shots/iphone-draw-E.avif?v=2"><img loading="lazy" decoding="async" class="en" src="img/shots/iphone-draw-E.png?v=2" alt=""></picture><figcaption>iPhone</figcaption></figure>
+      <figure><picture><source type="image/avif" srcset="img/shots/duo-closed2-J.avif?v=2"><img loading="lazy" decoding="async" class="ja" src="img/shots/duo-closed2-J.png?v=2" alt=""></picture><picture><source type="image/avif" srcset="img/shots/duo-closed2-E.avif?v=2"><img loading="lazy" decoding="async" class="en" src="img/shots/duo-closed2-E.png?v=2" alt=""></picture><figcaption><span class="ja">iPhone Duo（閉じた状態）</span><span class="en">iPhone Duo (closed)</span></figcaption></figure>
+      <figure><picture><source type="image/avif" srcset="img/shots/duo-open3-J.avif?v=2"><img loading="lazy" decoding="async" class="ja" src="img/shots/duo-open3-J.png?v=2" alt=""></picture><picture><source type="image/avif" srcset="img/shots/duo-open3-E.avif?v=2"><img loading="lazy" decoding="async" class="en" src="img/shots/duo-open3-E.png?v=2" alt=""></picture><figcaption><span class="ja">iPhone Duo（開いた状態）</span><span class="en">iPhone Duo (open)</span></figcaption></figure>
+    </div>
+  </div>
 </section>
 
-<section class="card">
-
-<h3>🍦 安心・安全な設計</h3>
-
-<img
-    src="adfree.png"
-    alt="広告なしで安心して遊べることの紹介"
->
-
-<p>
-広告なしで安心して遊べます。<br>
-楽しい効果音が付いています。<br>
-作成した作品は写真ライブラリに保存できます。<br>
-プレミアムを購入すると、すべての機能を利用できます。
-</p>
-
+<!-- ===== Parents ===== -->
+<section class="block" id="parents">
+  <div class="wrap parents">
+    <div class="parents-photo"><img loading="lazy" decoding="async" src="img/kids.jpg?v=2" alt=""></div>
+    <div>
+      <div class="kicker">FOR PARENTS</div>
+      <h2 style="font-family:var(--round);font-weight:900;font-size:clamp(28px,3.6vw,38px);margin:8px 0 0;line-height:1.35"><span class="ja">保護者の方へ</span><span class="en">For parents</span></h2>
+      <ul class="check-list">
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+          <div><strong><span class="ja">広告なしで安心して遊べます</span><span class="en">No ads, so kids can play safely</span></strong></div></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+          <div><strong><span class="ja">ユーザーの個人情報を収集しません</span><span class="en">No personal information is collected</span></strong>
+          <span class="d"><span class="ja">アクセス解析や利用状況の追跡も行いません。</span><span class="en">No analytics or activity tracking.</span></span></div></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+          <div><strong><span class="ja">作品は写真ライブラリに保存できます</span><span class="en">Save artwork to the photo library</span></strong>
+          <span class="d"><span class="ja">作品が外部へ送信されることはありません。</span><span class="en">Artwork is never sent anywhere.</span></span></div></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+          <div><strong><span class="ja">楽しい効果音付き</span><span class="en">Fun sound effects</span></strong></div></li>
+        <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9b5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg></span>
+          <div><strong><span class="ja">プレミアムを購入すると、すべての機能を利用できます</span><span class="en">Unlock every feature with Premium</span></strong>
+          <span class="d"><span class="ja">購入はApp Storeを通じて処理されます。</span><span class="en">Purchases are processed by the App Store.</span></span></div></li>
+      </ul>
+      <a class="btn-line" href="privacy.html"><span class="ja">プライバシーポリシーを見る</span><span class="en">Read the Privacy Policy</span> →</a>
+    </div>
+  </div>
 </section>
 
-<section class="card">
-
-<h2>プライバシーについて</h2>
-
-<p>
-おえかきスターは、ユーザーの個人情報を収集しません。
-</p>
-
-<p>
-データの取り扱い、写真ライブラリへのアクセス、アプリ内課金などについては、プライバシーポリシーをご確認ください。
-</p>
-
-<p>
-<a class="link-button" href="privacy.html">
-プライバシーポリシーを見る
-</a>
-</p>
-
+<!-- ===== Info / Terms / Contact ===== -->
+<section class="block" style="padding-top:0" id="info">
+  <div class="wrap info-grid">
+    <div class="info-card">
+      <h3><span class="ja">アプリ情報</span><span class="en">App info</span></h3>
+      <dl>
+        <dt><span class="ja">年齢区分（App Store）</span><span class="en">Age rating (App Store)</span></dt><dd>4+</dd>
+        <dt><span class="ja">対応機種</span><span class="en">Devices</span></dt><dd>iPhone / iPad</dd>
+        <dt><span class="ja">アプリ内課金</span><span class="en">In-app purchase</span></dt><dd><span class="ja">プレミアム機能の購入が可能です。</span><span class="en">Premium features are available for purchase.</span></dd>
+      </dl>
+    </div>
+    <div class="info-card" id="terms">
+      <h3><span class="ja">利用規約</span><span class="en">Terms of use</span></h3>
+      <p><span class="ja">本アプリは現状有姿で提供されます。</span><span class="en">The App is provided “as is.”</span></p>
+      <p><span class="ja">開発者は、本アプリの利用によって生じた損害について、法律上認められる範囲を超えて責任を負いません。</span><span class="en">To the extent permitted by law, the developer is not liable for any damages arising from use of the App.</span></p>
+      <p><span class="ja">本アプリの内容や機能は、予告なく変更される場合があります。</span><span class="en">Content and features of the App may change without notice.</span></p>
+    </div>
+    <div class="info-card" id="contact">
+      <h3><span class="ja">お問い合わせ</span><span class="en">Contact</span></h3>
+      <p><span class="ja">アプリやプライバシーポリシーに関するお問い合わせは、以下のメールアドレスまでお願いいたします。</span><span class="en">For questions about the App or the Privacy Policy, please email:</span></p>
+      <a class="mail" href="mailto:oekakistar.info@gmail.com">oekakistar.info@gmail.com</a>
+    </div>
+  </div>
 </section>
 
-<section class="card">
-
-<h2>アプリ情報</h2>
-
-<p>
-<strong>対象年齢</strong><br>
-3歳以上
-</p>
-
-<p>
-<strong>対応機種</strong><br>
-iPhone<br>
-iPad
-</p>
-
-<p>
-<strong>アプリ内課金</strong><br>
-プレミアム機能の購入が可能です。
-</p>
-
-</section>
-
-<section class="card">
-
-<h2>利用規約</h2>
-
-<p>
-本アプリは現状有姿で提供されます。
-</p>
-
-<p>
-開発者は、本アプリの利用によって生じた損害について、法律上認められる範囲を超えて責任を負いません。
-</p>
-
-<p>
-本アプリの内容や機能は、予告なく変更される場合があります。
-</p>
-
-</section>
-
-<section class="card">
-
-<h2>お問い合わせ</h2>
-
-<p>
-アプリやプライバシーポリシーに関するお問い合わせは、以下のメールアドレスまでお願いいたします。
-</p>
-
-<p>
-<a
-    class="contact-link"
-    href="mailto:oekakistar.info@gmail.com"
->
-oekakistar.info@gmail.com
-</a>
-</p>
-
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <div class="wrap">
+    <img class="cta-icon" src="img/icon-256.png" alt="">
+    <h2><span class="ja">さあ、おえかきをはじめよう！</span><span class="en">Let's start drawing!</span></h2>
+    <a class="store-badge" href="https://apps.apple.com/app/id6787955768">
+      <img class="ja" src="img/badges/app-store-ja.svg" alt="App Storeからダウンロード">
+      <img class="en" src="img/badges/app-store-en.svg" alt="Download on the App Store">
+    </a>
+  </div>
 </section>
 
 </main>
 
-<footer class="footer">
-
-<p>
-最終更新日：2026年7月18日
-</p>
-
-<p>
-© 2026 おえかきスター
-</p>
-
+<footer class="site-footer">
+  <div class="wrap">
+    <nav>
+      <a href="privacy.html"><span class="ja">プライバシーポリシー</span><span class="en">Privacy Policy</span></a>
+      <a href="#terms"><span class="ja">利用規約</span><span class="en">Terms</span></a>
+      <a href="#contact"><span class="ja">お問い合わせ</span><span class="en">Contact</span></a>
+    </nav>
+    <div>
+      <span class="ja">最終更新日：2026年11月7日</span><span class="en">Last updated: November 7, 2026</span>
+      ・ © 2026 <span class="ja">おえかきスター</span><span class="en">Crayon Friends</span>
+    </div>
+  </div>
 </footer>
 
+<script src="js/pen-engine.js"></script>
+<script src="js/stickers.js"></script>
+<script src="js/pens.js"></script>
+<script src="js/hero.js"></script>
+<script>
+document.querySelectorAll(".lang-switch button").forEach(function (b) {
+  b.addEventListener("click", function () {
+    var lang = b.getAttribute("data-set");
+    document.documentElement.setAttribute("data-lang", lang);
+    document.documentElement.setAttribute("lang", lang);
+    try { localStorage.setItem("oekaki-lang", lang); } catch (e) {}
+  });
+});
+</script>
 </body>
 </html>
