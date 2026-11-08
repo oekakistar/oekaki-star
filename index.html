@@ -5,6 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>おえかきスター｜幼児向けお絵描きアプリ</title>
 <meta name="description" content="おえかきスターは、3歳からのお子さま向けお絵描きアプリです。ペン、スタンプ、動くシール、ぬりえで遊べます。広告なし・個人情報の収集なし。">
+<link rel="canonical" href="https://oekakistar.github.io/oekaki-star/">
+<!-- iPhoneのSafariで、ページ上部に「App Storeで開く」バナーを出す -->
+<meta name="apple-itunes-app" content="app-id=6787955768">
+<!-- SNS・LINE・メッセージでURLを共有したときのカード -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="おえかきスター">
+<meta property="og:title" content="おえかきスター｜かいて、はって、うごきだす！幼児向けお絵描きアプリ">
+<meta property="og:description" content="ペン、スタンプ、動くシール、ぬりえで遊べる、小さなお子さま向けのお絵描きアプリ。広告なし・個人情報の収集なし。iPhone・iPad対応。">
+<meta property="og:url" content="https://oekakistar.github.io/oekaki-star/">
+<meta property="og:image" content="https://oekakistar.github.io/oekaki-star/img/og-ja.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="おえかきスターのiPad画面。星空に動くシールを貼っているところ">
+<meta property="og:locale" content="ja_JP">
+<meta property="og:locale:alternate" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/icon-180.png">
 <link rel="apple-touch-icon" href="img/icon-180.png">
 
@@ -273,6 +289,64 @@ br.pc { display: inline; }
 .site-footer a { color: var(--ink-soft); }
 .site-footer nav { display: flex; gap: 18px; flex-wrap: wrap; }
 
+/* 動画で見る */
+.movie-band { padding-top: 72px; padding-bottom: 40px; }
+.movie-frame { position: relative; max-width: min(920px, calc((100vh - 110px) * 1.25)); margin: 0 auto; padding: 14px; background: #1f1f24; border-radius: 34px; box-shadow: 0 24px 50px rgba(60, 40, 10, .22); }
+.movie-frame video { display: block; width: 100%; aspect-ratio: 4 / 3; border-radius: 22px; background: #fff9f0; object-fit: cover; }
+.movie-toggle { position: absolute; right: 26px; bottom: 26px; width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(30, 28, 40, .62); color: #fff; display: grid; place-items: center; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.movie-toggle:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+.movie-toggle svg { width: 18px; height: 18px; }
+.movie-toggle .i-pause, .movie-toggle.is-playing .i-play { display: none; }
+.movie-toggle.is-playing .i-pause { display: block; }
+.movie-note { text-align: center; color: var(--ink-soft); font-size: 13px; margin: 14px 0 0; }
+
+/* 動くシール図鑑 */
+.zukan-band { background: linear-gradient(180deg, var(--bg) 0%, #eef7ff 100%); }
+.zukan { display: grid; grid-template-columns: 1.15fr 1fr; gap: 32px; align-items: center; }
+.zukan-stage { position: relative; background: #fff; border-radius: 28px; box-shadow: var(--shadow); border: 1px solid #d9ebfb; height: 400px; display: grid; place-items: center; overflow: hidden; }
+.zukan-stage video { position: absolute; inset: 0; margin: auto; width: 94%; height: 92%; object-fit: contain; mix-blend-mode: multiply; }
+.zukan-caption { margin-top: 16px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.zukan-name { font-family: var(--round); font-weight: 900; font-size: 24px; }
+.zukan-move { color: var(--ink-soft); font-size: 15px; flex-basis: 100%; margin-top: -4px; }
+.zbadge { font-size: 12px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+.zbadge.free { background: #e7f8ee; color: #1f9b5a; }
+.zbadge.prem { background: #fff3d6; color: #a86f00; }
+.zukan-pick { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+.zukan-pick button { position: relative; border: 2px solid transparent; background: #fff; border-radius: 18px; padding: 8px 4px 6px; cursor: pointer; font: inherit; color: var(--ink); box-shadow: 0 4px 10px rgba(0, 0, 0, .05); transition: transform .15s ease, border-color .15s ease; }
+.zukan-pick button:hover { transform: translateY(-2px); }
+.zukan-pick button:focus-visible { outline: 3px solid var(--sky); outline-offset: 2px; }
+.zukan-pick button[aria-pressed="true"] { border-color: var(--sky); background: #f3f9ff; }
+.zukan-pick img { width: 100%; aspect-ratio: 1; object-fit: contain; }
+.zukan-pick .lbl { display: block; font-size: 12px; font-weight: 700; line-height: 1.3; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.zukan-pick .crown { position: absolute; top: 4px; right: 5px; width: 16px; height: 16px; }
+.zukan-legend { margin: 14px 0 0; font-size: 13px; color: var(--ink-soft); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.zukan-legend svg { width: 15px; height: 15px; flex: none; }
+.zukan-all { margin-top: 48px; }
+.zukan-all h3 { text-align: center; font-family: var(--round); font-weight: 900; font-size: 20px; margin: 0 0 14px; }
+.marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.marquee-track { display: flex; width: max-content; animation: marquee 80s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee picture { flex: none; width: 84px; height: 84px; margin: 0 6px; background: #fff; border-radius: 20px; padding: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, .05); }
+.marquee img { width: 100%; height: 100%; object-fit: contain; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (max-width: 900px) {
+  .zukan { grid-template-columns: 1fr; }
+  .zukan-stage { height: 320px; }
+}
+@media (max-width: 560px) {
+  .movie-frame { padding: 8px; border-radius: 22px; }
+  .movie-frame video { border-radius: 15px; }
+  .movie-toggle { right: 16px; bottom: 16px; width: 38px; height: 38px; }
+  .zukan-stage { height: 260px; }
+  .zukan-pick { gap: 6px; }
+  .zukan-pick button { border-radius: 14px; padding: 6px 2px 4px; }
+  .zukan-pick .lbl { font-size: 10.5px; }
+  .marquee picture { width: 64px; height: 64px; border-radius: 16px; padding: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee { overflow-x: auto; }
+}
+
 /* ---------- Responsive ---------- */
 @media (min-width: 720px) { .store-badge.header-badge { display: inline-block; } }
 @media (max-width: 900px) {
@@ -399,6 +473,28 @@ br.pc { display: inline; }
   </ul>
 </section>
 
+<!-- ===== Movie ===== -->
+<section class="block movie-band" id="movie">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">MOVIE</div>
+      <h2><span class="ja">動画で見る</span><span class="en">See it in action</span></h2>
+      <p><span class="ja">実際のアプリ画面を録画した動画です（音は出ません）。</span><span class="en">Recorded from the actual app (no sound).</span></p>
+    </div>
+    <div class="movie-frame">
+      <video id="promo" muted playsinline loop preload="none"
+        data-src-ja="video/preview-ipad-ja.mp4" data-src-en="video/preview-ipad-en.mp4"
+        data-poster-ja="video/preview-ipad-ja.jpg" data-poster-en="video/preview-ipad-en.jpg"
+        aria-label="おえかきスターの紹介動画 / Crayon Friends preview video"></video>
+      <button type="button" class="movie-toggle" id="promo-toggle" aria-label="再生">
+        <svg class="i-play" viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>
+        <svg class="i-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="5.5" y="4.5" width="4.5" height="15" rx="1.2"/><rect x="14" y="4.5" width="4.5" height="15" rx="1.2"/></svg>
+      </button>
+    </div>
+    <p class="movie-note"><span class="ja">※一部の色・シールはアプリ内課金（プレミアム）で使えます。</span><span class="en">*Some colors and stickers require an in-app purchase (Premium).</span></p>
+  </div>
+</section>
+
 <!-- ===== Features ===== -->
 <section class="block" id="features">
   <div class="wrap">
@@ -472,6 +568,76 @@ br.pc { display: inline; }
         </div>
       </article>
 
+    </div>
+  </div>
+</section>
+
+<!-- ===== Sticker gallery ===== -->
+<section class="block zukan-band" id="stickers">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">STICKERS</div>
+      <h2><span class="ja">動くシール図鑑</span><span class="en">Animated sticker gallery</span></h2>
+      <p><span class="ja">シールをえらぶと、アプリと同じ動きで動きだします。</span><span class="en">Pick a sticker to see it move — exactly as it does in the app.</span></p>
+    </div>
+    <div class="zukan" id="zukan">
+      <div>
+        <div class="zukan-stage"><video muted playsinline loop preload="none" aria-label="シールの動き / Sticker animation"></video></div>
+        <div class="zukan-caption" aria-live="polite">
+          <span class="zukan-name"><span class="ja"></span><span class="en"></span></span>
+          <span class="zbadge"></span>
+          <span class="zukan-move"><span class="ja"></span><span class="en"></span></span>
+        </div>
+      </div>
+      <div>
+        <div class="zukan-pick" role="group" aria-label="シールをえらぶ / Choose a sticker">
+        <button type="button" data-clip="vehicle_rocket" data-ja="ロケット" data-en="Rocket" data-move-ja="炎を出して、上へ飛んでいきます。" data-move-en="Blasts off with fire." data-free aria-pressed="false">
+          <picture><source type="image/avif" srcset="img/zukan/rocket-1.avif"><img loading="lazy" decoding="async" src="img/zukan/rocket-1.png" alt=""></picture>
+          <span class="lbl"><span class="ja">ロケット</span><span class="en">Rocket</span></span>
+        </button>
+        <button type="button" data-clip="animal_frog" data-ja="かえる" data-en="Frog" data-move-ja="ぴょーんと跳ねます。" data-move-en="Hops around." data-free aria-pressed="false">
+          <picture><source type="image/avif" srcset="img/zukan/frog.avif"><img loading="lazy" decoding="async" src="img/zukan/frog.png" alt=""></picture>
+          <span class="lbl"><span class="ja">かえる</span><span class="en">Frog</span></span>
+        </button>
+        <button type="button" data-clip="fantasy_unicorn" data-ja="ユニコーン" data-en="Unicorn" data-move-ja="星をまきながら走ります。" data-move-en="Gallops and scatters stars." data-free aria-pressed="false">
+          <picture><source type="image/avif" srcset="img/zukan/unicorn.avif"><img loading="lazy" decoding="async" src="img/zukan/unicorn.png" alt=""></picture>
+          <span class="lbl"><span class="ja">ユニコーン</span><span class="en">Unicorn</span></span>
+        </button>
+        <button type="button" data-clip="animal_butterfly" data-ja="ちょうちょ" data-en="Butterfly" data-move-ja="羽をパタパタして舞います。" data-move-en="Flutters its wings." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/butterfly-body.avif"><img loading="lazy" decoding="async" src="img/zukan/butterfly-body.png" alt=""></picture>
+          <span class="lbl"><span class="ja">ちょうちょ</span><span class="en">Butterfly</span></span>
+        </button>
+        <button type="button" data-clip="animal_whale" data-ja="くじら" data-en="Whale" data-move-ja="泳ぎながら、しおをふきます。" data-move-en="Swims and spouts water." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/whale-body.avif"><img loading="lazy" decoding="async" src="img/zukan/whale-body.png" alt=""></picture>
+          <span class="lbl"><span class="ja">くじら</span><span class="en">Whale</span></span>
+        </button>
+        <button type="button" data-clip="fantasy_dragon" data-ja="ドラゴン" data-en="Dragon" data-move-ja="羽ばたいて、火をふきます。" data-move-en="Flaps its wings and breathes fire." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/dragon1.avif"><img loading="lazy" decoding="async" src="img/zukan/dragon1.png" alt=""></picture>
+          <span class="lbl"><span class="ja">ドラゴン</span><span class="en">Dragon</span></span>
+        </button>
+        <button type="button" data-clip="animal_egg_hatch" data-ja="たまご" data-en="Egg" data-move-ja="ゆれて、割れて、ひよこが出てきます。" data-move-en="Wobbles, cracks, and a chick pops out." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/egg.avif"><img loading="lazy" decoding="async" src="img/zukan/egg.png" alt=""></picture>
+          <span class="lbl"><span class="ja">たまご</span><span class="en">Egg</span></span>
+        </button>
+        <button type="button" data-clip="vehicle_helicopter" data-ja="ヘリコプター" data-en="Helicopter" data-move-ja="プロペラを回して、ふわふわ飛びます。" data-move-en="Spins its rotor and floats." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/helicopter1.avif"><img loading="lazy" decoding="async" src="img/zukan/helicopter1.png" alt=""></picture>
+          <span class="lbl"><span class="ja">ヘリコプター</span><span class="en">Helicopter</span></span>
+        </button>
+        <button type="button" data-clip="vehicle_train" data-ja="きしゃ" data-en="Train" data-move-ja="けむりを出して走ります。" data-move-en="Puffs smoke as it runs." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/train2.avif"><img loading="lazy" decoding="async" src="img/zukan/train2.png" alt=""></picture>
+          <span class="lbl"><span class="ja">きしゃ</span><span class="en">Train</span></span>
+        </button>
+        <button type="button" data-clip="thing_treasure_chest" data-ja="たからばこ" data-en="Treasure" data-move-ja="パカッと開きます。" data-move-en="Pops open." aria-pressed="false">
+          <svg class="crown" viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><picture><source type="image/avif" srcset="img/zukan/treasurechest1.avif"><img loading="lazy" decoding="async" src="img/zukan/treasurechest1.png" alt=""></picture>
+          <span class="lbl"><span class="ja">たからばこ</span><span class="en">Treasure</span></span>
+        </button>
+        </div>
+        <p class="zukan-legend"><svg viewBox="0 0 64 48" aria-hidden="true"><path d="M6 14l13 12L32 6l13 20 13-12-5 28H11z" fill="#FFD60A" stroke="#E8A300" stroke-width="4" stroke-linejoin="round"/></svg><span class="ja">マークのシールは、プレミアムで使えます。</span><span class="en">Stickers with a crown are part of Premium.</span></p>
+      </div>
+    </div>
+    <div class="zukan-all">
+      <h3><span class="ja">ぜんぶで56種類の動くシール</span><span class="en">56 animated stickers in all</span></h3>
+      <div class="marquee" aria-hidden="true"><div class="marquee-track"><picture><source type="image/avif" srcset="img/zukan/ufo-1.avif"><img loading="lazy" decoding="async" src="img/zukan/ufo-1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/firetruck.avif"><img loading="lazy" decoding="async" src="img/zukan/firetruck.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/chick3.avif"><img loading="lazy" decoding="async" src="img/zukan/chick3.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/dog-body.avif"><img loading="lazy" decoding="async" src="img/zukan/dog-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/rocket-1.avif"><img loading="lazy" decoding="async" src="img/zukan/rocket-1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/unchi1.avif"><img loading="lazy" decoding="async" src="img/zukan/unchi1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/unicorn.avif"><img loading="lazy" decoding="async" src="img/zukan/unicorn.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish1.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/frog.avif"><img loading="lazy" decoding="async" src="img/zukan/frog.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/santaclaus.avif"><img loading="lazy" decoding="async" src="img/zukan/santaclaus.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/wizard.avif"><img loading="lazy" decoding="async" src="img/zukan/wizard.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/dragon1.avif"><img loading="lazy" decoding="async" src="img/zukan/dragon1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/firefighter.avif"><img loading="lazy" decoding="async" src="img/zukan/firefighter.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/policecar.avif"><img loading="lazy" decoding="async" src="img/zukan/policecar.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ambulance.avif"><img loading="lazy" decoding="async" src="img/zukan/ambulance.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/helicopter1.avif"><img loading="lazy" decoding="async" src="img/zukan/helicopter1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/car.avif"><img loading="lazy" decoding="async" src="img/zukan/car.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/train2.avif"><img loading="lazy" decoding="async" src="img/zukan/train2.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/butterfly-body.avif"><img loading="lazy" decoding="async" src="img/zukan/butterfly-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/stagbeetle-body.avif"><img loading="lazy" decoding="async" src="img/zukan/stagbeetle-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/honeybee-body.avif"><img loading="lazy" decoding="async" src="img/zukan/honeybee-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/fairy.avif"><img loading="lazy" decoding="async" src="img/zukan/fairy.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/owl.avif"><img loading="lazy" decoding="async" src="img/zukan/owl.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/sun.avif"><img loading="lazy" decoding="async" src="img/zukan/sun.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/chicken.avif"><img loading="lazy" decoding="async" src="img/zukan/chicken.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/egg.avif"><img loading="lazy" decoding="async" src="img/zukan/egg.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/octopus1.avif"><img loading="lazy" decoding="async" src="img/zukan/octopus1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/shark-body.avif"><img loading="lazy" decoding="async" src="img/zukan/shark-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/whale-body.avif"><img loading="lazy" decoding="async" src="img/zukan/whale-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish2.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish2.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish3.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish3.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish4.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish4.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/dinosaur.avif"><img loading="lazy" decoding="async" src="img/zukan/dinosaur.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/strawberry.avif"><img loading="lazy" decoding="async" src="img/zukan/strawberry.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/rainbow.avif"><img loading="lazy" decoding="async" src="img/zukan/rainbow.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ribbon.avif"><img loading="lazy" decoding="async" src="img/zukan/ribbon.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/star.avif"><img loading="lazy" decoding="async" src="img/zukan/star.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/soccerball.avif"><img loading="lazy" decoding="async" src="img/zukan/soccerball.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/fire1.avif"><img loading="lazy" decoding="async" src="img/zukan/fire1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/balloon.avif"><img loading="lazy" decoding="async" src="img/zukan/balloon.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/bigballoon.avif"><img loading="lazy" decoding="async" src="img/zukan/bigballoon.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/treasurechest1.avif"><img loading="lazy" decoding="async" src="img/zukan/treasurechest1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/robot-body.avif"><img loading="lazy" decoding="async" src="img/zukan/robot-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/crab-body.avif"><img loading="lazy" decoding="async" src="img/zukan/crab-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ghost.avif"><img loading="lazy" decoding="async" src="img/zukan/ghost.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/cat-body.avif"><img loading="lazy" decoding="async" src="img/zukan/cat-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/bear1.avif"><img loading="lazy" decoding="async" src="img/zukan/bear1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/giraffe-body.avif"><img loading="lazy" decoding="async" src="img/zukan/giraffe-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/turtle1.avif"><img loading="lazy" decoding="async" src="img/zukan/turtle1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/panda-f.avif"><img loading="lazy" decoding="async" src="img/zukan/panda-f.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/hamster-f.avif"><img loading="lazy" decoding="async" src="img/zukan/hamster-f.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/elephant.avif"><img loading="lazy" decoding="async" src="img/zukan/elephant.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/chick2-r.avif"><img loading="lazy" decoding="async" src="img/zukan/chick2-r.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/rabbit.avif"><img loading="lazy" decoding="async" src="img/zukan/rabbit.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/monkey1.avif"><img loading="lazy" decoding="async" src="img/zukan/monkey1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/penguin-r.avif"><img loading="lazy" decoding="async" src="img/zukan/penguin-r.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ufo-1.avif"><img loading="lazy" decoding="async" src="img/zukan/ufo-1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/firetruck.avif"><img loading="lazy" decoding="async" src="img/zukan/firetruck.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/chick3.avif"><img loading="lazy" decoding="async" src="img/zukan/chick3.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/dog-body.avif"><img loading="lazy" decoding="async" src="img/zukan/dog-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/rocket-1.avif"><img loading="lazy" decoding="async" src="img/zukan/rocket-1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/unchi1.avif"><img loading="lazy" decoding="async" src="img/zukan/unchi1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/unicorn.avif"><img loading="lazy" decoding="async" src="img/zukan/unicorn.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish1.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/frog.avif"><img loading="lazy" decoding="async" src="img/zukan/frog.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/santaclaus.avif"><img loading="lazy" decoding="async" src="img/zukan/santaclaus.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/wizard.avif"><img loading="lazy" decoding="async" src="img/zukan/wizard.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/dragon1.avif"><img loading="lazy" decoding="async" src="img/zukan/dragon1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/firefighter.avif"><img loading="lazy" decoding="async" src="img/zukan/firefighter.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/policecar.avif"><img loading="lazy" decoding="async" src="img/zukan/policecar.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ambulance.avif"><img loading="lazy" decoding="async" src="img/zukan/ambulance.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/helicopter1.avif"><img loading="lazy" decoding="async" src="img/zukan/helicopter1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/car.avif"><img loading="lazy" decoding="async" src="img/zukan/car.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/train2.avif"><img loading="lazy" decoding="async" src="img/zukan/train2.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/butterfly-body.avif"><img loading="lazy" decoding="async" src="img/zukan/butterfly-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/stagbeetle-body.avif"><img loading="lazy" decoding="async" src="img/zukan/stagbeetle-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/honeybee-body.avif"><img loading="lazy" decoding="async" src="img/zukan/honeybee-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/fairy.avif"><img loading="lazy" decoding="async" src="img/zukan/fairy.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/owl.avif"><img loading="lazy" decoding="async" src="img/zukan/owl.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/sun.avif"><img loading="lazy" decoding="async" src="img/zukan/sun.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/chicken.avif"><img loading="lazy" decoding="async" src="img/zukan/chicken.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/egg.avif"><img loading="lazy" decoding="async" src="img/zukan/egg.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/octopus1.avif"><img loading="lazy" decoding="async" src="img/zukan/octopus1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/shark-body.avif"><img loading="lazy" decoding="async" src="img/zukan/shark-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/whale-body.avif"><img loading="lazy" decoding="async" src="img/zukan/whale-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish2.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish2.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish3.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish3.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/tropicalfish4.avif"><img loading="lazy" decoding="async" src="img/zukan/tropicalfish4.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/dinosaur.avif"><img loading="lazy" decoding="async" src="img/zukan/dinosaur.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/strawberry.avif"><img loading="lazy" decoding="async" src="img/zukan/strawberry.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/rainbow.avif"><img loading="lazy" decoding="async" src="img/zukan/rainbow.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ribbon.avif"><img loading="lazy" decoding="async" src="img/zukan/ribbon.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/star.avif"><img loading="lazy" decoding="async" src="img/zukan/star.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/soccerball.avif"><img loading="lazy" decoding="async" src="img/zukan/soccerball.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/fire1.avif"><img loading="lazy" decoding="async" src="img/zukan/fire1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/balloon.avif"><img loading="lazy" decoding="async" src="img/zukan/balloon.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/bigballoon.avif"><img loading="lazy" decoding="async" src="img/zukan/bigballoon.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/treasurechest1.avif"><img loading="lazy" decoding="async" src="img/zukan/treasurechest1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/robot-body.avif"><img loading="lazy" decoding="async" src="img/zukan/robot-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/crab-body.avif"><img loading="lazy" decoding="async" src="img/zukan/crab-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/ghost.avif"><img loading="lazy" decoding="async" src="img/zukan/ghost.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/cat-body.avif"><img loading="lazy" decoding="async" src="img/zukan/cat-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/bear1.avif"><img loading="lazy" decoding="async" src="img/zukan/bear1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/giraffe-body.avif"><img loading="lazy" decoding="async" src="img/zukan/giraffe-body.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/turtle1.avif"><img loading="lazy" decoding="async" src="img/zukan/turtle1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/panda-f.avif"><img loading="lazy" decoding="async" src="img/zukan/panda-f.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/hamster-f.avif"><img loading="lazy" decoding="async" src="img/zukan/hamster-f.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/elephant.avif"><img loading="lazy" decoding="async" src="img/zukan/elephant.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/chick2-r.avif"><img loading="lazy" decoding="async" src="img/zukan/chick2-r.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/rabbit.avif"><img loading="lazy" decoding="async" src="img/zukan/rabbit.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/monkey1.avif"><img loading="lazy" decoding="async" src="img/zukan/monkey1.png" alt=""></picture><picture><source type="image/avif" srcset="img/zukan/penguin-r.avif"><img loading="lazy" decoding="async" src="img/zukan/penguin-r.png" alt=""></picture></div></div>
     </div>
   </div>
 </section>
@@ -631,7 +797,7 @@ br.pc { display: inline; }
       <a href="#contact"><span class="ja">お問い合わせ</span><span class="en">Contact</span></a>
     </nav>
     <div>
-      <span class="ja">最終更新日：2026年11月7日</span><span class="en">Last updated: November 7, 2026</span>
+      <span class="ja">最終更新日：2026年11月8日</span><span class="en">Last updated: November 8, 2026</span>
       ・ © 2026 <span class="ja">おえかきスター</span><span class="en">Crayon Friends</span>
     </div>
   </div>
@@ -641,6 +807,7 @@ br.pc { display: inline; }
 <script src="js/stickers.js"></script>
 <script src="js/pens.js"></script>
 <script src="js/hero.js"></script>
+<script src="js/media.js"></script>
 <script>
 document.querySelectorAll(".lang-switch button").forEach(function (b) {
   b.addEventListener("click", function () {
